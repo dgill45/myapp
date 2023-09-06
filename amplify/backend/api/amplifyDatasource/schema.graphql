@@ -1,0 +1,25 @@
+type Book @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String
+  isbn: ISBN @hasOne
+  publisherID: ID! @index(name: "byPublisher")
+  authors: [Author] @manyToMany(relationName: "AuthorBook")
+}
+
+type Publisher @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  books: [Book] @hasMany(indexName: "byPublisher", fields: ["id"])
+}
+
+type ISBN @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  number: Int
+}
+
+type Author @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  firstname: String
+  lastname: String
+  books: [Book] @manyToMany(relationName: "AuthorBook")
+}
